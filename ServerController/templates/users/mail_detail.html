@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <title>INS | Send mail </title>
+  </head>
+  <body style="background-color:#0e1621; font-family: ubuntu; ">
+    {% include 'navbar.html'  %}
+    
+    <div class="profile_out_form">
+      <form method='POST' class='profile-form' enctype="multipart/form-data" >
+        <h2 style="text-align: center;">INS Mail</h2>
+
+
+        <p style="width:80px; display: inline-block;">From:</p>{{ mail.username_from }} <br>
+        <p style="width:80px; display: inline-block;">To:</p>{{ mail.username_to }}<br>
+        <p style="width:80px; display: inline-block;">Subject:</p>{{ mail.subject }}
+        <p style="text-align:unset;">{{ mail.body|linebreaks }} </p>
+        <a style="margin-top: 10px;" class="btn_style_1" href="{% url 'replymail' user_to=mail.username_from.username     subject=mail.subject %}">reply</a>
+      </form>
+      
+    </div>
+    {% if request.user_agent.is_mobile %}
+      <form style='height:130px;'></form>
+    {% endif %}
+  </body>
+</html>

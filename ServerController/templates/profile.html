@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <title>INS | Send mail </title>
+  </head>
+  <body style="background-color:#0e1621; font-family: ubuntu; ">
+    {% include 'navbar.html' with current_page="profile"  %}
+    <div class="profile_out_form">
+        <h2>Profile</h2>
+        <p>username: {{ user.username }}</p>
+        <p>app: {{ user.profile.user_app.name }}</p>
+    </div>
+
+    {% if request.user_agent.is_mobile %}
+      <form style='height:130px;'></form>
+    {% endif %}
+  </body>
+</html>

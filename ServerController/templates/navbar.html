@@ -1,0 +1,116 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'style/main.css' %}">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% if request.user_agent.is_mobile %}
+    <nav class="navbar" style="position: fixed;  bottom: 0; text-align: center;padding-bottom: 20;height: 43px;">
+
+    <nobr style="text-align: center;" > 
+      {% if current_page == 'profile'  %}
+        <div class="btn-holder-mobile">
+          <a class='header-buts current-page-button' href="{% url 'profile' %}"><img style="border-radius: 50%;" src="{% static 'images/profile.png' %}" width="25px"></a>
+        </div>
+      {% else %}
+        <div class="btn-holder-mobile">
+          <a class='header-buts ' href="{% url 'profile' %}"><img src="{% static 'images/profile.png' %}" width="25px"></a>
+        </div>
+      {% endif %}
+
+      {% if current_page == 'mail'  %}
+        <div class="btn-holder-mobile">
+          <a class='header-buts current-page-button' href="{% url 'mailView' %}"><img style="border-radius: 50%;" src="{% static 'images/mail.png' %}" width="25px"></a>
+        </div>
+      {% else %}
+        <div class="btn-holder-mobile">
+          <a class='header-buts ' href="{% url 'mailView' %}"><img src="{% static 'images/mail.png' %}" width="25px"></a>
+        </div>
+      {% endif %}
+
+      {% if current_page == 'INS'  %}
+      <div class="btn-holder-mobile">
+        <a class='header-buts current-page-button' href="{% url user.profile.user_app.home_path %}"><img style="border-radius: 50%;" src="{% static  user.profile.user_app.icon_path  %}" width="25px"></a>
+      </div>
+    {% else %}
+      <div class="btn-holder-mobile">
+        <a class='header-buts ' href="{% url user.profile.user_app.home_path %}"><img src="{% static  user.profile.user_app.icon_path  %}" width="25px"></a>
+      </div>
+    {% endif %}
+    </nobr>
+  </nav>
+  <div style="background-color:lawngreen;height: 70px;display: inline-block; padding-left: 20px;padding-right: 20px;border-radius: 10px;margin-bottom: 10px;">
+    <h1>fdf d sffdsd sd s</h1>
+
+  </div>
+
+{% else %}
+
+  <nav  onclick="location.href='{% url 'home'  %}';"class="navbar" style="position: fixed; width:100%;text-align: center;padding-top: 20px;">
+    <img style=" text-align: center; position: fixed;width: 40px; right: 49%;" src="{% static 'images/INSS-logo.png' %}" >
+  <div style="text-align: left;display: inline-block; width: 100%;">
+      
+    <nobr style="padding-left: 30px;"> 
+      
+      {% if current_page == 'profile'  %}
+        <div class="btn-holder-pc">
+          <a class='header-buts current-page-button' href="{% url 'profile' %}"><img style="border-radius: 50%;" src="{% static 'images/profile.png' %}" width="25px"></a>
+        </div>
+      {% else %}
+        <div class="btn-holder-pc">
+          <a class='header-buts ' href="{% url 'profile' %}"><img src="{% static 'images/profile.png' %}" width="25px"></a>
+        </div>
+      {% endif %}
+
+      {% if current_page == 'mail'  %}
+        <div class="btn-holder-pc">
+          <a class='header-buts current-page-button' href="{% url 'mailView' %}"><img style="border-radius: 50%;" src="{% static 'images/mail.png' %}" width="25px"></a>
+        </div>
+      {% else %}
+        <div class="btn-holder-pc">
+          <a class='header-buts ' href="{% url 'mailView' %}"><img src="{% static 'images/mail.png' %}" width="25px"></a>
+        </div>
+      {% endif %}
+    {% if current_page == 'storage'  %}
+      <div class="btn-holder-pc">
+        <a class='header-buts current-page-button' href="{% url 'personal_storage' user.profile.storage_file_pk %}"><img style="border-radius: 50%;" src="{% static  'images/storage.png'  %}" width="25px"></a>
+      </div>
+    {% else %}
+      <div class="btn-holder-pc">
+        <a class='header-buts ' href="{% url 'personal_storage' user.profile.storage_file_pk %}"><img src="{% static 'images/storage.png' %}" width="25px"></a>
+      </div>
+    {% endif %}
+
+    {% if user.profile.user_app.home_path %}
+      {% if current_page == 'INS'  %}
+        <div class="btn-holder-pc">
+          <a class='header-buts current-page-button' href="{% url user.profile.user_app.home_path %}"><img style="border-radius: 50%;" src="{% static  user.profile.user_app.icon_path  %}" width="25px"></a>
+        </div>
+      {% else %}
+        <div class="btn-holder-pc">
+          <a class='header-buts ' href="{% url user.profile.user_app.home_path %}"><img src="{% static  user.profile.user_app.icon_path  %}" width="25px"></a>
+        </div>
+      {% endif %}
+    {% endif %}
+    
+    </div>
+    
+    
+    
+    
+
+    </nobr>
+    
+  </nav>
+
+  <form style='height:100px;'></form>
+  {% if message %}
+  <div style="background-color:green;height: 70px;display: inline-block; padding-left: 20px;padding-right: 20px;border-radius: 5px;position: fixed;box-shadow: 5px 5px 5px 5px rgba(0,0,0,0.5);">
+    <h1>{{ message|linebreaks }}</h1>
+  </div>
+  {% endif %}
+   
+  {% endif %}
+
+
+
+
+
+

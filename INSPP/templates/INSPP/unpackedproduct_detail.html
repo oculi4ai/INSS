@@ -1,0 +1,66 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <title>INS | Unpacked Product </title>
+  </head>
+  <body style="background-color:#0e1621; font-family: ubuntu; ">
+    {% include 'navbar.html'  %}
+    <form class="profile_out_form" method="POST" style="text-align: left;">
+        <h2 style="text-align: center;">Unpacked Product</h2>
+        {% csrf_token %}
+        <p style="width: 30%; display: inline-block;text-align: right;"> Name:   </p>{{ form.name|add_class:"field-style-2" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Code:  </p>{{ form.code|add_class:"field-style-2" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Material type:  </p>{{ form.material_type|add_class:"field-style-2" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Quantity:  </p>{{ form.quantity|add_class:"field-style-2" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Unit:  </p>{{ form.unit|add_class:"field-style-2" }} <br>
+        
+        <button type="submit" class="btn_style_1" name="edit" value="Edit" style="display: inline-block;"><img src="{% static 'inspp-icons/edit.png' %}" alt="Add raw material" style="width: 30px;"></button>
+        <div class="btn_style_1" id="myBtn" style="width: 30px;display: inline-block;"><img src="{% static 'inspp-icons/delete.png' %}" alt="Add raw material" style="width: 30px;"></div>
+        <div id="myModal" class="modal">
+          <div class="modal-content profile_out_form">
+            <span class="close">&times;</span>
+            <p>Are you sure Do you wannt to delete this?</p>
+            <button type="submit" class="btn_style_1" name="delete" value="Delete" >YES</button>
+          </div>
+        </div>
+
+    </form>
+    
+    {% if request.user_agent.is_mobile %}
+      <form style='height:130px;'></form>
+    {% endif %}
+  </body>
+  <script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on the button, open the modal
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    } 
+  </script>
+</html>

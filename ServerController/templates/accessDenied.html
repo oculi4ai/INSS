@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <title>INS | ACCESS DENIED </title>
+  </head>
+  <body style="background-color:#0e1621; font-family: ubuntu; ">
+    {% include 'navbar.html'   %}
+      <h1 style="text-align: center; color: white;">ACCESS DENIED</h1>
+      <p style="text-align: center; color: white;">You don't have access to this page</p>
+
+    {% if request.user_agent.is_mobile %}
+      <form style='height:130px;'></form>
+    {% endif %}
+  </body>
+</html>

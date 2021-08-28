@@ -1,0 +1,76 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <title>INS | Add File </title>
+  </head>
+  <body style="background-color:#0e1621; font-family: ubuntu; ">
+    <style>
+      #filedrag
+{
+	display: none;
+	font-weight: bold;
+	text-align: center;
+	padding: 1em 0;
+	margin: 1em 0;
+	color: #555;
+	border: 2px dashed #555;
+	border-radius: 7px;
+	cursor: default;
+}
+
+#filedrag.hover
+{
+	color: #f00;
+	border-color: #f00;
+	border-style: solid;
+	box-shadow: inset 0 3px 4px #888;
+}
+    </style>
+    {% include 'navbar.html'  %}
+    
+    <form class="profile_out_form" method="POST" style="text-align: left;"  enctype="multipart/form-data"  >
+        <h2 style="text-align: center;">Add File</h2>
+        {% csrf_token %}
+        <p style="width: 30%; display: inline-block;text-align: right;"> Name:   </p>{{ form.name|add_class:"field-style-2" }} <br>
+        <div style="text-align: center;">
+          <label class="btn_style_1" for="upload">Upload File</label>
+          
+          <input type="file" name="file" id="upload" >
+          <div id="file-upload-filename" style="margin-top: 20px;"></div>
+        </div>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Privet:   </p>{{ form.privet}} <br>
+        
+        <button type='submit' class="btn_style_1"><img src="{% static 'inspp-icons/add.png' %}" alt="Add raw material" style="width: 30px;"></button>
+    </form>
+    {% if request.user_agent.is_mobile %}
+      <form style='height:130px;'></form>
+    {% endif %}
+  </body>
+  <script>
+    var input = document.getElementById( 'upload' );
+    var infoArea = document.getElementById( 'file-upload-filename' );
+
+    input.addEventListener( 'change', showFileName );
+
+    function showFileName( event ) {
+      
+      // the change event gives us the input it occurred in 
+      var input = event.srcElement;
+      
+      // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
+      var fileName = input.files[0].name;
+      
+      // use fileName however fits your app best, i.e. add it into a div
+      infoArea.textContent = 'Selected file: ' + fileName;
+    }
+
+
+
+</script>
+</html>

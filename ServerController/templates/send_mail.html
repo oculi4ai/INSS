@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <title>INS | Send mail </title>
+  </head>
+  <body style="background-color:#0e1621; font-family: ubuntu; ">
+    {% include 'navbar.html'  %}
+    
+    <div class="profile_out_form">
+      <form method='POST' class='profile-form' enctype="multipart/form-data" >
+        <h2 style="text-align: center;">INS Mail</h2>
+        {% csrf_token %}
+        {{ message }} <br>
+
+        <p style="width:80px; display: inline-block;">From:</p>{{ user.username }} <br>
+        {% if user_to %}
+          <p style="width:80px; display: inline-block;">To:</p>{{ form.username_to.value|default_if_none:user_to  }}<br>
+        {% else %}
+          <p style="width:80px; display: inline-block;">To:</p>{{ form.username_to }}<br>
+        {% endif %}
+
+        {% if subject %}
+          <p style="width:80px; display: inline-block;">Subject:</p>{{ form.subject.value|default_if_none:subject }}<br>
+        {% else %}
+          <p style="width:80px; display: inline-block;">Subject:</p>{{ form.subject }}<br>
+        {% endif %}
+            <br><br>
+        
+        {{ form.body }} 
+        <button type='submit' style="margin-top: 10px;" class="btn_style_1">Send</button>
+      </form>
+    </div>
+    {% if request.user_agent.is_mobile %}
+      <form style='height:130px;'></form>
+    {% endif %}
+  </body>
+</html>

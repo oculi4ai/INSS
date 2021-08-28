@@ -1,0 +1,79 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <title>INS | Add Folder </title>
+  </head>
+  <body style="background-color:#0e1621; font-family: ubuntu; ">
+    {% include 'navbar.html' with current_page="storage" %}
+    
+    <form class="profile_out_form" method="POST" style="text-align: left;">
+      <div style="display: inline-block;width: 100%;">
+        <h1 style="text-align: center;">{{ current_item.name }}</h1>
+
+        {% if current_item.MainFolder.MainFolder.MainFolder %}
+          <a href="{% url 'personal_storage' current_item.MainFolder.MainFolder.MainFolder.id %}" class="btn_style_1" style="margin-top: 10px;width: max-content;text-decoration: none; display: inline-block;color: aliceblue;"> {{ current_item.MainFolder.MainFolder.MainFolder.name }}  </a> >
+        {% endif %}  
+
+        
+        {% if current_item.MainFolder.MainFolder %}
+        <a href="{% url 'personal_storage' current_item.MainFolder.MainFolder.id %}" class="btn_style_1" style="margin-top: 10px;width: max-content;text-decoration: none; display: inline-block;color: aliceblue;"> {{ current_item.MainFolder.MainFolder.name }}  </a> >
+        {% endif %}  
+
+        {% if current_item.MainFolder %}
+        <a href="{% url 'personal_storage' current_item.MainFolder.id %}" class="btn_style_1" style="margin-top: 10px;width: max-content;text-decoration: none; display: inline-block;color: aliceblue;"> {{ current_item.MainFolder.name }}</a>
+        {% endif %}
+
+        <div style="display: inline-block;width: 100%;margin-top: 20px;">
+          <div onclick="location.href='{% url 'addFolder' current_item.id %}';" style="width: max-content;display: inline-block;" class="btn_style_1"><img src="{% static 'images/folder.png' %}" alt="Add Folder" style="width: 30px;"></div>
+          <div onclick="location.href='{% url 'addFile' current_item.id %}';" style="width: max-content; display: inline-block;" class="btn_style_1"><img src="{% static 'images/file.png' %}" alt="Add File" style="width: 30px;"></div>
+        </div>
+
+
+      </div>
+        {% for m in folders|slice:"::-1" %}
+            <div class="list_item_2" style="background-color: #0e1621;" onclick="location.href='{% url 'personal_storage' m.pk %}';">
+                <h4> <img src="{% static 'images/folder.png' %}" width="30px"> 
+                  {{m.name}} 
+                </h4>
+                <div style="width: 100%;text-align: right;">
+                  <a href="{% url 'folder'  m.pk %}" style="margin-right: 10px;"><img src="{% static 'images/edit.png' %}" alt="" width="30px" height="30px"></a>
+                </div>
+                
+            </div>
+        {% endfor %}
+
+        {% for m in files|slice:"::-1" %}
+            <div class="list_item_2" style="background-color: #0e1621;text-align: right;" >
+                
+              <div style="text-align: left;">
+                <img src="{% static 'images/file.png' %}" style="display: inline-block;vertical-align: top;margin-top: 10px;" width="30px"> 
+                <div style="display: inline-block;"> 
+                  <h4 style="text-align: left;" >  {{m.name}} {% if m.privet %} <small style="color: gray;"> Privet </small> {% endif %} </h4>  
+                  <h6 style="color: gray;"> {{ m.file.name|slice:"12:"}} </h6><br>
+                   
+                </div> 
+              </div>  
+                <a href="{% url 'file'  m.pk %}" style="display: inline-block;text-align: left;width: min-content;"><img src="{% static 'images/edit.png' %}" alt="" width="30px" height="30px"></a>
+                <a href="{% url 'download_file'  m.pk %}" style="display: inline-block;width: 50%;text-align: right;width: min-content;"><img src="{% static 'images/download.png' %}" alt="" width="30px" height="30px"></a>
+                <a href="{{ m.file.url }}" style="display: inline-block;text-align: left;width: min-content; margin-right: 10px;"><img src="{% static 'images/download.png' %}" alt=""  width="30px" height="30px"></a>
+            </div>
+        {% endfor %}
+      {% if empty %}
+          <h4>This folder is empty</h4>
+      {% endif %}
+
+      
+
+
+    </form>
+    {% if request.user_agent.is_mobile %}
+      <form style='height:130px;'></form>
+    {% endif %}
+  </body>
+</html>

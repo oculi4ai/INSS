@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <title>INS | Send mail </title>
+  </head>
+  <body style="background-color:#141f30; font-family: ubuntu; ">
+    {% include 'navbar.html' with current_page="mail"  %}
+    <div>
+        <div style=" display: inline-block;width: 100%;">
+            <div class="tab-bar-v" style="height: min-content;display: inline-block;bottom:100%;vertical-align: top; ">
+                <button class="tab-bar-v-btn" onclick="openTab1(event, 'Inbox')" id="defaultOpen" >Inbox</button><br>
+                <button class="tab-bar-v-btn" onclick="openTab1(event, 'Outbox')">Outbox</button><br> 
+                <button class="tab-bar-v-btn" onclick="location.href='{% url 'sendmail' %}';">Write mail</button><br> 
+            </div>
+            <div style="display: inline-block; width: 90%;color: white;right: 0; ">
+                <div id="Inbox" class="tabcontent" >
+                    <h2 style="text-align: center;">INBOX</h2>
+                    {% for m in user.username_to.all|slice:"::-1" %}
+                        <div class="list_item" onclick="location.href='{% url 'readmail' m.pk %}';">
+                            <h4>{{m.username_from}}</h4>
+                            <small style="color: gray;">{{ m.sending_datetime }}</small>
+                            <p style="margin-top: 35px;">{{ m.subject }}</p>
+                        </div>
+                    {% endfor %}
+
+                </div>
+                <div id="Outbox" class="tabcontent" >
+                    <h2 style="text-align: center;">OUTBOX</h2>
+                    {% for m in user.username_from.all|slice:"::-1" %}
+                        <div class="list_item" onclick="location.href='{% url 'readmail' m.pk %}';">
+                            <h4>{{m.username_to}}</h4>
+                            <small style="color: gray;">{{ m.sending_datetime }}</small>
+                            
+                           
+                            {% if m.received %}
+                                {% if m.readed %}
+                                    <small style="color: gray;">Readed</small>
+                                {% else %}
+                                    <small style="color: gray;">Received</small>
+                                {% endif %}
+                            {% endif %}
+                            <p style="margin-top: 35px;">{{ m.subject }}</p>
+                            
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% if request.user_agent.is_mobile %}
+      <form style='height:130px;'></form>
+    {% endif %}
+  </body>
+  <script>
+    function openTab1(evt, cityName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(cityName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+    
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+    </script>
+</html>

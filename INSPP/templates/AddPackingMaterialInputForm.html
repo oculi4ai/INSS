@@ -1,0 +1,29 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <title>INS | Add Packing material input </title>
+  </head>
+  <body style="background-color:#0e1621; font-family: ubuntu; ">
+    {% include 'navbar.html'  %}
+    <form class="profile_out_form" method="POST" style="text-align: left;">
+        <h2 style="text-align: center;">Add Packing material input</h2>
+        {% csrf_token %}
+        <p style="width: 30%; display: inline-block;text-align: right;"> Material:   </p>{{ form.material|add_class:"field-style-2" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Quantity:  </p>{{ form.quantity|add_class:"field-style-2" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Date:  </p>{{ form.date|add_class:"field-style-2" }} <br>
+        <p style="width: 30%;   text-align: left;"> Note  </p>{{ form.note|add_class:"field-style-1" }} <br>
+        <button type='submit' class="btn_style_1"><img src="{% static 'inspp-icons/add.png' %}" alt="Add raw material" style="width: 30px;"></button>
+        
+    </form>
+
+    {% if request.user_agent.is_mobile %}
+      <form style='height:130px;'></form>
+    {% endif %}
+  </body>
+</html>

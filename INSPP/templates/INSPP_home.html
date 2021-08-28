@@ -1,0 +1,116 @@
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'style/main.css' %}">
+        <title>INS | Send mail </title>
+    </head>
+    <body style='background-color:#141f30; scrollbar-color: #2b5278 rgba(0,0,0,0);font-family: ubuntu;' >
+        {% include 'navbar.html' with current_page="INS" %}
+        
+
+        <div>
+            <div style=" display: inline-block;width: 100%;">
+                <div class="tab-bar-v" style="height: min-content;display: inline-block;bottom:100%;vertical-align: top; ">
+                    <button class="tab-bar-v-btn" onclick="openTab1(event, 'Raw materials')"  id="defaultOpen">Raw materials</button><br> 
+                    <button class="tab-bar-v-btn" onclick="openTab1(event, 'Packing materials')">Packing materials</button><br> 
+                    <button class="tab-bar-v-btn" onclick="openTab1(event, 'Unpacked products')">Unpacked products</button><br> 
+                    <button class="tab-bar-v-btn" onclick="openTab1(event, 'Packed products')">Packed products</button><br> 
+                    <button class="tab-bar-v-btn" onclick="openTab1(event, 'orders')">Orders</button><br> 
+
+
+                </div>
+                <div style="display: inline-block; width: 90%;color: white;right: 0; ">
+
+
+                    
+                    
+                    <div id="Raw materials" class="tabcontent" >
+                        <h3 style="text-align: center;">Raw Materials</h3>
+                        <div style="width: 100%;text-align: right;">
+                            <a href="{% url 'AddRawMaterial' %}"><img src="{% static 'inspp-icons/add.png' %}" alt="Add raw material" style="width: 30px;margin-bottom:20px;"></a>
+                        </div>
+                        {% for material in RAWMATERIALS %}
+                            <div class="list_item"  onclick="location.href='{% url 'EditRawMaterial' material.id %}';">
+                                <p>{{ material.name }}</p> 
+                            </div>
+                        
+                        {% endfor %}
+                    </div>
+                    
+                    <div id="Packing materials" class="tabcontent">
+                        <h3 style="text-align: center;">Packing materials</h3>
+                        <div style="width: 100%;text-align: right;">
+                            <a href="{% url 'AddPackingMaterial' %}"><img src="{% static 'inspp-icons/add.png' %}" alt="Add packing material" style="width: 30px;margin-bottom:20px;"></a>
+                        </div>
+                        {% for material in PACKINGMATERIAL %}
+                            <div class="list_item"  onclick="location.href='{% url 'EditPackingMaterial' material.id %}';">
+                                <p>{{ material.name }}</p> 
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div id="Unpacked products" class="tabcontent">
+                        <h3 style="text-align: center;">Unpacked Products</h3>
+                        <div style="width: 100%;text-align: right;">
+                            <a href="{% url 'AddUnpackedProduct' %}"><img src="{% static 'inspp-icons/add.png' %}" alt="Add packing material" style="width: 30px;margin-bottom:20px;"></a>
+                        </div>
+                            {% for material in UNPACKEDPRODUCT %}
+                                <div class="list_item"  onclick="location.href='{% url 'EditUnpackedProduct' material.id %}';">
+                                    <p>{{ material.name }}</p> 
+                                </div>
+                            {% endfor %}
+                    </div>
+    
+                    <div id="Packed products" class="tabcontent">
+                        <h3 style="text-align: center;">Packed Products</h3>
+                        <div style="width: 100%;text-align: right;">
+                            <a href="{% url 'AddPackedProduct' %}"><img src="{% static 'inspp-icons/add.png' %}" alt="Add packing material" style="width: 30px;margin-bottom:20px;"></a>
+                        </div>
+                            {% for material in PACKEDPRODUCT %}
+                                <div class="list_item"  onclick="location.href='{% url 'EditPackedProduct' material.id %}';">
+                                    <p>{{ material.name }}</p> 
+                                </div>
+                            {% endfor %}
+                    </div>
+    
+                    <div id="orders" class="tabcontent">
+                        <h3 style="text-align: center;">Orders</h3>
+                        <div style="width: 100%;text-align: right;">
+                            <a href="{% url 'AddOrder' %}"><img src="{% static 'inspp-icons/add.png' %}" alt="Add packing material" style="width: 30px;margin-bottom:20px;"></a>
+                        </div>
+                            {% for material in ORDER %}
+                                <div class="list_item"  onclick="location.href='{% url 'EditOrder' material.id %}';">
+                                    <p>{{ material.name }}</p> 
+                                </div>
+                            {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% if request.user_agent.is_mobile %}
+      <form style='height:130px;'></form>
+    {% endif %}
+    </body>
+
+    <script>
+        function openTab1(evt, cityName) {
+          var i, tabcontent, tablinks;
+          tabcontent = document.getElementsByClassName("tabcontent");
+          for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+          }
+          tablinks = document.getElementsByClassName("tablinks");
+          for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+          }
+          document.getElementById(cityName).style.display = "block";
+          evt.currentTarget.className += " active";
+        }
+        
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+        </script>
+</html>

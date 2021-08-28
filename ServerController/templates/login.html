@@ -1,0 +1,44 @@
+
+{% load static %}
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    <title>OF | LOGIN</title>
+  </head>
+  <body style='background-color:#242f3d;'>
+    <div id="loader" class="center"></div>
+    <div style='text-align:center;font-family:ubuntu;color:rgb(250,250,250);'>
+      {% if request.user_agent.is_mobile %}
+        <img src="{% static 'images/INS-logo.png' %}" style='width:80%;height:auto;'>
+      {% else %}
+        <img src="{% static 'images/INS-logo.png' %}" style='width:30%;height:auto;'>
+      {% endif %}
+        <p>Login</p>
+        <form method='POST' class='profile-form' enctype="multipart/form-data" style="margin-top: 30px;">
+          {% csrf_token %}
+          {% if  form.errors.as_ul %}
+            <div style="background-color:crimson; width:max-content;margin: 0 auto; padding: 10px;border-radius: 5px;text-align: left;">
+             ACCESS DENIED
+            </div>
+          {% endif %}
+          {% csrf_token %}
+          <div style="padding:10px;" >
+            
+              {{ form.username |ljust:"1000" }}
+
+          </div>
+          <div style="padding:10px;" >
+              {{ form.password|rjust:"10" }}
+              
+          </div>
+          <button type="submit" name="login" style="  background-color:#324675;          color: aliceblue;          text-decoration:None;          border: 0px;          padding:10px;          border-radius: 6px;">LOGIN</button>
+        </form>
+    </div>
+
+  </body>
+</html>

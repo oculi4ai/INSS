@@ -1,0 +1,35 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <title>INS | Add order </title>
+  </head>
+  <body style="background-color:#0e1621; font-family: ubuntu; ">
+    {% include 'navbar.html'  %}
+    <form class="profile_out_form" method="POST" style="text-align: left;">
+        <h2 style="text-align: center;">Add order</h2>
+        {% csrf_token %}
+        <p style="width: 30%; display: inline-block;text-align: right;"> Name:   </p>{{ form.name|add_class:"field-style-2" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Code:  </p>{{ form.code|add_class:"field-style-2" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Packed product:  </p>{{ form.packed_product|add_class:"field-style-2" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Quantity:  </p>{{ form.quantity|add_class:"field-style-2" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Starting date: </p>{{ form.starting_date|add_class:"field-style-5" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Planned finishing date:  </p>{{ form.planned_finishing_date|add_class:"field-style-5" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Actual finished date:  </p>{{ form.actual_finishing_date|add_class:"field-style-5" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> Done:  </p>{{ form.done }} <br>
+        
+        
+        <button type='submit' class="btn_style_1"><img src="{% static 'inspp-icons/add.png' %}" alt="Add raw material" style="width: 30px;"></button>
+        
+    </form>
+
+    {% if request.user_agent.is_mobile %}
+      <form style='height:130px;'></form>
+    {% endif %}
+  </body>
+</html>

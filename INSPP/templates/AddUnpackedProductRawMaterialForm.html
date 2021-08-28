@@ -1,0 +1,29 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <title>INS | Add Unpacked product Raw material </title>
+  </head>
+  <body style="background-color:#0e1621; font-family: ubuntu; ">
+    {% include 'navbar.html'  %}
+    <form class="profile_out_form" method="POST" style="text-align: left;">
+        <h2 style="text-align: center;">Add Unpacked product Raw material</h2>
+        {% csrf_token %}
+        <p style="width: 30%; display: inline-block;text-align: right;"> product:   </p>{{ form.product|add_class:"field-style-2" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> material:  </p>{{ form.material|add_class:"field-style-2" }} <br>
+        <p style="width: 30%; display: inline-block;text-align: right;"> percent:  </p>{{ form.percent|add_class:"field-style-2" }} <br>
+        
+        <button type='submit' class="btn_style_1"><img src="{% static 'inspp-icons/add.png' %}" alt="Add raw material" style="width: 30px;"></button>
+        
+    </form>
+
+    {% if request.user_agent.is_mobile %}
+      <form style='height:130px;'></form>
+    {% endif %}
+  </body>
+</html>

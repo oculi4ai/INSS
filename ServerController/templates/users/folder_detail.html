@@ -1,0 +1,124 @@
+
+
+  
+
+        {% load static %}
+        {% load widget_tweaks %}
+        
+        <!DOCTYPE html>
+        <html lang="en" dir="ltr">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" href="{% static 'style/main.css' %}">
+            <title>INS | File </title>
+          </head>
+          <body style="background-color:#0e1621; font-family: ubuntu; ">
+            <style>
+              #filedrag
+        {
+          display: none;
+          font-weight: bold;
+          text-align: center;
+          padding: 1em 0;
+          margin: 1em 0;
+          color: #555;
+          border: 2px dashed #555;
+          border-radius: 7px;
+          cursor: default;
+        }
+        
+        #filedrag.hover
+        {
+          color: #f00;
+          border-color: #f00;
+          border-style: solid;
+          box-shadow: inset 0 3px 4px #888;
+        }
+            </style>
+            {% include 'navbar.html'  %}
+            {% if form %}
+            <form class="profile_out_form" method="POST" style="text-align: left;"  enctype="multipart/form-data"  >
+              <a href="{% url 'personal_storage' form.instance.MainFolder.id %}" class="btn_style_1" style="display: inline-block;"> < </a>
+              <h2 style="text-align: center;">Folder</h2>
+                
+                {% csrf_token %}
+                <p style="width: 30%; display: inline-block;text-align: right;"> Name:   </p>{{ form.name|add_class:"field-style-2" }} <br>
+                <h2 id="upload" ></h2>
+                <p style="width: 30%; display: inline-block;text-align: right;"> Privet:   </p>{{ form.privet}} <br>
+                
+                
+                <button type="submit" class="btn_style_1" name="edit" value="Edit" style="display: inline-block;"><img src="{% static 'inspp-icons/edit.png' %}" alt="Add raw material" style="width: 30px;"></button>
+                <div class="btn_style_1" id="myBtn" style="width: 30px;display: inline-block;"><img src="{% static 'inspp-icons/delete.png' %}" alt="Add raw material" style="width: 30px;"></div>
+                <div id="myModal" class="modal">
+                  <div class="modal-content profile_out_form">
+                    <span class="close">&times;</span>
+                    <p>Are you sure Do you wannt to delete this?</p>
+                    <button type="submit" class="btn_style_1" name="delete" value="delete" >YES</button>
+                  </div>
+                </div>
+        
+            </form>
+            {% endif %}
+            {% if not form   %}
+            <form class="profile_out_form" method="POST" style="text-align: left;"  enctype="multipart/form-data"  >
+              <h2 style="text-align: center;">{{ object.name }}</h2>
+                <div style="text-align: center;">
+                  {% if object.file %}
+                    <p>  File: <a href="{{ object.file.url }}" style="display: inline-block;text-align: left;width: min-content;color:cyan; text-decoration: none;">{{ object.file.name|slice:"12:" }}  </a><small style="color: gray;">{{ object.file.size }}</small><br></p>
+                    <p>  Owner: {{ object.owner }}</p> 
+                  {% endif %}
+                </div>
+            </form>
+            {% endif %}
+        
+            {% if request.user_agent.is_mobile %}
+              <form style='height:130px;'></form>
+            {% endif %}
+          </body>
+          <script>
+            var input = document.getElementById( 'upload' );
+            var infoArea = document.getElementById( 'file-upload-filename' );
+        
+            input.addEventListener( 'change', showFileName );
+        
+            function showFileName( event ) {
+              
+              // the change event gives us the input it occurred in 
+              var input = event.srcElement;
+              
+              // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
+              var fileName = input.files[0].name;
+              
+              // use fileName however fits your app best, i.e. add it into a div
+              infoArea.textContent = 'Selected file: ' + fileName;
+            }
+        
+            var modal = document.getElementById("myModal");
+        
+            // Get the button that opens the modal
+            var btn = document.getElementById("myBtn");
+        
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+        
+            // When the user clicks on the button, open the modal
+            btn.onclick = function() {
+            modal.style.display = "block";
+            }
+        
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+            modal.style.display = "none";
+            }
+        
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+            } 
+        
+        </script>
+        </html>
+        
