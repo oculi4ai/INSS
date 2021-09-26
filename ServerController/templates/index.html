@@ -1,39 +1,58 @@
 {% load static %}
-
-
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
-    <title>OF | LOGIN</title>
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <script src="{% static 'style/main.js' %}"></script>  
+    <link rel=icon href="{% static 'images/INSS logo.png' %}" sizes="16x16" type="image/png">
+    <title>INS | SERVER</title>
   </head>
-  <body style='background-color:#242f3d;'>
-    {% include 'navbar.html'  %}
-    <div style='text-align:center;font-family:ubuntu;color:rgb(250,250,250);'>
-      {% if request.user_agent.is_mobile %}
-        <img src="{% static 'images/INSS-logo.png' %}" style='width:55%;height:auto;padding: 20px;'>
-      {% else %}
-        <img src="{% static 'images/INSS-logo.png' %}" style='width:15%;height:auto;padding: 20px; '>
-      {% endif %}
-        <h1 style="font-size: 100%;">INS Server is runing...</h1>
-        <p>URL: {{ request.build_absolute_uri }}</p>
-        <div style="display: inline-block;">
-          <img src="{% static 'images/INSPP-logo.png' %}" style='width:70px;height:auto;padding: 20px;'>
-          <img src="{% static 'images/INSHR-logo.png' %}" style='width:70px;height:auto;padding: 20px;'>
-          <img src="{% static 'images/INSEA-logo.png' %}" style='width:70px;height:auto;padding: 20px;'>
-          <img src="{% static 'images/INSHR-logo.png' %}" style='width:70px;height:auto;padding: 20px;'>
-          <img src="{% static 'images/INSPP-logo.png' %}" style='width:70px;height:auto;padding: 20px;'>
-          
-        </div>
-    <div>
-        <p> <img src="{% static 'images/oculi-logo.png' %}" style='width:60px;'><br> By Oculi</p>
-    </div>
-    {% if request.user_agent.is_mobile %}
-      <form style='height:130px;'></form>
-    {% endif %}
-    </div>
+ 
+  {% include 'navbar.html' %}
 
+  
+  <body id="body"  class="body-style" >
+    {% include 'loading-div.html' %}
+    <div id='body-content'> 
+      <div style='text-align:center;font-family:ubuntu;color:rgb(250,250,250);'>
+        {% if request.user_agent.is_mobile %}
+          <img src="{% static 'images/INSS-logo.png' %}" style='width:55%;height:auto;padding: 20px;animation: show-up 5s ;'>
+        {% else %}
+          <img src="{% static 'images/INSS-logo.png' %}" style='width:15%;height:auto;padding: 20px; animation: show-up 5s ;'>
+        {% endif %}
+          <h1  class="typing-text">Information Network System</h1>
+          <br>
+          <div style="position: relative;">
+            <h2 class="scrolling-word" style='animation-delay: 0s;'>MANAGER</h2>
+            <h2 class="scrolling-word" style='animation-delay: 5s;'>PRODUCTION PLAN</h2>
+            <h2 class="scrolling-word" style='animation-delay: 10s;'>HUMAN RESOURCES</h2>
+            <h2 class="scrolling-word" style='animation-delay: 15s;'>REPOSITORIES MANAGER</h2>
+            <h2 class="scrolling-word" style='animation-delay: 20s;'>ACCOUNTER</h2>
+            <h2 class="scrolling-word" style='animation-delay: 25s;'>EMPLOYER APP</h2>
+          </div>
+
+          <div style="display: inline-block;">
+            <img src="{% static 'images/INSRM-logo.png' %}" style='width:100px;height:auto;padding: 20px; animation: logos-motion 3s;'>
+            <img src="{% static 'images/INSEA-logo.png' %}" style='width:100px;height:auto;padding: 20px; animation: logos-motion 2s;'>
+            <img src="{% static 'images/INSA-logo.png' %}"  style='width:100px;height:auto;padding: 20px; animation: logos-motion 1s;'>
+            <img src="{% static 'images/INSPP-logo.png' %}" style='width:100px;height:auto;padding: 20px; animation: logos-motion 1s;'>
+            <img src="{% static 'images/INSHR-logo.png' %}" style='width:100px;height:auto;padding: 20px; animation: logos-motion 2s;'>
+            <img src="{% static 'images/INSM-logo.png' %}"  style='width:100px;height:auto;padding: 20px; animation: logos-motion 3s;'>
+
+            
+          </div>
+      <div>
+          <p> <img src="{% static 'images/oculi-logo.png' %}" style='width:60px;'><br> By Oculi</p>
+      </div>
+      <p style="font-size: 100%;">INS Server is runing...</p>
+      <p onclick="" style="display: inline-block;">URL: {{ request.build_absolute_uri }}</p>
+      
+      <button onclick='navigator.clipboard.writeText("{{ request.build_absolute_uri }}")' class="btn_style_1" style="display:inline-block;">Copy</button>
+
+      </div>
+    </div>
   </body>
+  
 </html>

@@ -1,0 +1,37 @@
+{% load static %}
+  <li>                                   
+    <a href="{% url 'INSPPHome' %}">
+      <i style="padding-left: 10px;" > <img  src="{% static  'images/INSPP-logo.png'  %}" width="35px"> </i>
+      <span class="nav-text">INS Production Plan</span>
+    </a>
+  </li>  
+  <li class="darkerlishadow">
+    <a href="{% url 'RawMaterials' %}" style="height: 30px;">
+      <i></i>
+      <span class="nav-text">Raw Material</span>
+    </a>
+   </li>
+   <li class="darkerli">
+    <a href="{% url 'PackingMaterials' %}" style="height: 30px;">
+      <i></i>
+      <span class="nav-text">Packing Materials</span>
+    </a>
+   </li>
+   <li class="darkerli">
+    <a href="{% url 'UnpackedProducts' %}" style="height: 30px;">
+      <i></i>
+      <span class="nav-text">Unpacked Products</span>
+    </a>
+   </li>
+   <li class="darkerli">
+    <a href="{% url 'PackedProducts' %}" style="height: 30px;">
+      <i></i>
+      <span class="nav-text">Packed Products</span>
+    </a>
+   </li>
+   <li class="darkerlishadowdown">
+    <a href="{% url 'Orders' %}" style="height: 30px;">
+      <i></i>
+      <span class="nav-text">Orders</span>
+    </a>
+   </li>

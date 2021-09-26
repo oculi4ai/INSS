@@ -7,12 +7,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <link rel=icon href="{% static 'images/INSPP logo.png' %}" sizes="16x16" type="image/png">
     <title>INS | Add Packed Product Packing material </title>
   </head>
-  <body style="background-color:#0e1621; font-family: ubuntu; ">
-    {% include 'navbar.html'  %}
+  {% include 'navbar.html' %}
+          <body class="body-style">
     <form class="profile_out_form" method="POST" style="text-align: left;">
-        <h2 style="text-align: center;">Add Packed Product Packing material</h2>
+        <h2 style="text-align: center;">Add Packed Product Packing Material</h2>
         {% csrf_token %}
         <p style="width: 30%; display: inline-block;text-align: right;"> Packed product:   </p>{{ form.packed_product|add_class:"field-style-2" }} <br>
         <p style="width: 30%; display: inline-block;text-align: right;"> Packing material:  </p>{{ form.packing_material|add_class:"field-style-2" }} <br>

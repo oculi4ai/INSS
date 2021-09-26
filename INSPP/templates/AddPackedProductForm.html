@@ -7,10 +7,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <link rel=icon href="{% static 'images/INSPP logo.png' %}" sizes="16x16" type="image/png">
     <title>INS | Add Packed Product </title>
   </head>
-  <body style="background-color:#0e1621; font-family: ubuntu; ">
-    {% include 'navbar.html'  %}
+  {% include 'navbar.html' %}
+          <body class="body-style">
     <form class="profile_out_form" method="POST" style="text-align: left;">
         <h2 style="text-align: center;">Add Packed Product</h2>
         {% csrf_token %}

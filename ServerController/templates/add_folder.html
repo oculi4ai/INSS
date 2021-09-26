@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="{% static 'style/main.css' %}">
     <title>INS | Add Folder </title>
   </head>
-  <body style="background-color:#0e1621; font-family: ubuntu; ">
-    {% include 'navbar.html'  %}
+  {% include 'navbar.html' %}
+  <body class="body-style">
     <form class="profile_out_form" method="POST" style="text-align: left;">
         <h2 style="text-align: center;">Add Folder</h2>
         {% csrf_token %}

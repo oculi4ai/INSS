@@ -13,7 +13,7 @@ class SendMailForm(forms.ModelForm):
 
     class Meta:
         model=mail
-        fields=('username_from','username_to','subject','body','sending_datetime','received','readed')
+        fields=('username_from','username_to','subject','body','sending_datetime')
 
 
 class MailRecevedForm(forms.Form):

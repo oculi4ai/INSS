@@ -6,52 +6,98 @@ from django.views.generic import DetailView
 from django.http import JsonResponse, request
 
 def send_mail(request, user_to=False , subject=False):
+    
+
     if not request.user.is_authenticated:
         return redirect('login')
     else:
         if request.method == 'POST':
-
-            try:
             
-                user = User.objects.get(username = request.POST['username_to'])
+            try:
+                CC_USERS = json.loads(request.POST['cc-list'])
+                BCC_USERS = json.loads(request.POST['bcc-list'])
+                ALL_USERS = set(User.objects.all().values_list('username', flat=True))
+                
+
+                if  ( not set(CC_USERS).issubset(ALL_USERS)) or ( not set(BCC_USERS).issubset(ALL_USERS)):
+                    
+                    notification = [['Users Not Found!',''],]
+                    try:
+                        request.user.error_messages += notification
+                    except:
+                        request.user.error_messages = notification
+
+                    data = {
+                        'form': SendMailForm(),
+                        'error_messages' : ['Users Not Found!',], 
+                        'users': json.dumps( list(User.objects.all().values_list('username', flat=True)) ) ,
+                    }
+
+                    ren = render(request, 'send_mail.html', data)
+                    ren.set_cookie("message",'Users Not Found!')
+                    return ren
+                
+                del ALL_USERS
+
+                
                 new_mail= mail.objects.create(
                         username_from   = request.user,
-                        username_to     = user,
                         subject         = request.POST['subject'],
                         body            = request.POST['body'],
                         sending_datetime= datetime.datetime.now().isoformat(),
-                        received        = 0,
-                        readed          = 0,
                     )
 
+                for user in CC_USERS:
+                    Mail_CC_Receiver.objects.create(
+                        user = User.objects.get(username = user),
+                        mail = new_mail
+                    )
 
-                user.profile.new_mail_inbox = json.dumps(json.loads(user.profile.new_mail_inbox) + [new_mail.id ,])
-                user.save()
-                user.profile.save()
+                for user in BCC_USERS:
+                    Mail_BCC_Receiver.objects.create(
+                        user = User.objects.get(username = user),
+                        mail = new_mail
+                    )
+
+                notification = [
+                        ['Mail sended successfully',
+                        f'''{len(CC_USERS)} CC 
+                            {len(BCC_USERS)} BCC'''],]
+                try:
+                    request.user.success_messages += notification
+                except:
+                    request.user.success_messages = notification
+
+                return redirect('OutboxMailView')
                 
-                request.user.profile.new_mail_outbox = json.dumps(json.loads(request.user.profile.new_mail_outbox) + [new_mail.id ,])
-                request.user.profile.save()
-
-
-                data = {
-                    'form': SendMailForm(),
-                    'user_to':user_to,
-                    'subject':subject,
-                    }
-
-                return redirect('mailView')
                     
 
             except:
-                data = {'form': SendMailForm(), 'message' : 'user not fount'}
-                return render(request, 'send_mail.html', data)
+                data = {
+                    'form': SendMailForm(),
+                    'error_messages' : ['Unexpected Error',], 
+                    'users': json.dumps( list(User.objects.all().values_list('username', flat=True)) ) ,
+                }
+                
+                notification = [['Unexpected Error',''],]
+                try:
+                    request.user.error_messages += notification
+                except:
+                    request.user.error_messages = notification
+
+                ren = render(request, 'send_mail.html', data)
+                ren.set_cookie("message",'Unexpected Error')
+                return ren
                 
 
         else:
+
+
             data = {
                     'form': SendMailForm(),
                     'user_to':user_to,
                     'subject':subject,
+                     'users': json.dumps( list(User.objects.all().values_list('username', flat=True)) ) ,
                     }
             return render(request, 'send_mail.html', data)
 
@@ -171,16 +217,30 @@ class ReadMail(DetailView):
 
    	def get(self,*args, **kwargs):
    	    c_mail = mail.objects.get(pk=self.kwargs['pk']) 
+
+   	    mail_cc_users =  list(Mail_CC_Receiver.objects.filter(mail = c_mail ).values_list('user', flat=True)) 
+   	    mail_bcc_users =  list(Mail_BCC_Receiver.objects.filter(mail = c_mail ).values_list('user', flat=True)) 
+
    	    if not self.request.user.is_authenticated:
    	        return redirect('login')
-
-   	    elif self.request.user not in ( c_mail.username_from , c_mail.username_to ):
+   	    
+   	    
+   	    elif self.request.user.pk not in  mail_cc_users + mail_bcc_users+[ c_mail.username_from.pk ,]  :
    	        return redirect('accessDenied')
 
    	    else:
-   	        if c_mail.username_to == self.request.user:
-   	            c_mail.readed=True
-   	            c_mail.save()
+   	        print(self.request.user.pk , mail_cc_users, mail_bcc_users)
+   	        if  self.request.user.pk in mail_cc_users:
+   	            cc_con          = Mail_CC_Receiver.objects.get(mail = c_mail , user = self.request.user )
+   	            cc_con.readed   = True
+   	            cc_con.DT       = datetime.datetime.now()
+   	            cc_con.save()
+
+   	        if  self.request.user.pk in mail_bcc_users:
+   	            bcc_con         = Mail_BCC_Receiver.objects.get(mail = c_mail , user = self.request.user )
+   	            bcc_con.readed   = True
+   	            bcc_con.DT       = datetime.datetime.now()
+   	            bcc_con.save()
 
    	        
    	        return super().get(*args, **kwargs)

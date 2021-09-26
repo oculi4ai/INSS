@@ -223,7 +223,7 @@ class PackingMaterialInput(models.Model):
     date        = models.DateField()
     note        = models.TextField(null=True, blank=True)
 
-class Order(models.Model):#'name','code','packed_product','quantity','starting_date','planned_finishing_date','actual_finishing_date','done'
+class Order(models.Model):
     name                        = models.CharField(max_length=200, null=True, blank=True)
     code                        = models.CharField(max_length=200, null=True, blank=True)
     packed_product              = models.ForeignKey(PackedProduct, null=True, blank=True ,on_delete=models.CASCADE)

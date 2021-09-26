@@ -1,116 +1,82 @@
+
+
+
+
+
+
 {% load static %}
 <html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="{% static 'style/main.css' %}">
-        <title>INS | Send mail </title>
+        <link rel=icon href="{% static 'images/INSPP logo.png' %}" sizes="16x16" type="image/png">
+        <title>INS | Production Plan </title>
     </head>
-    <body style='background-color:#141f30; scrollbar-color: #2b5278 rgba(0,0,0,0);font-family: ubuntu;' >
-        {% include 'navbar.html' with current_page="INS" %}
-        
-
-        <div>
-            <div style=" display: inline-block;width: 100%;">
-                <div class="tab-bar-v" style="height: min-content;display: inline-block;bottom:100%;vertical-align: top; ">
-                    <button class="tab-bar-v-btn" onclick="openTab1(event, 'Raw materials')"  id="defaultOpen">Raw materials</button><br> 
-                    <button class="tab-bar-v-btn" onclick="openTab1(event, 'Packing materials')">Packing materials</button><br> 
-                    <button class="tab-bar-v-btn" onclick="openTab1(event, 'Unpacked products')">Unpacked products</button><br> 
-                    <button class="tab-bar-v-btn" onclick="openTab1(event, 'Packed products')">Packed products</button><br> 
-                    <button class="tab-bar-v-btn" onclick="openTab1(event, 'orders')">Orders</button><br> 
-
-
-                </div>
-                <div style="display: inline-block; width: 90%;color: white;right: 0; ">
-
-
-                    
-                    
-                    <div id="Raw materials" class="tabcontent" >
-                        <h3 style="text-align: center;">Raw Materials</h3>
-                        <div style="width: 100%;text-align: right;">
-                            <a href="{% url 'AddRawMaterial' %}"><img src="{% static 'inspp-icons/add.png' %}" alt="Add raw material" style="width: 30px;margin-bottom:20px;"></a>
-                        </div>
-                        {% for material in RAWMATERIALS %}
-                            <div class="list_item"  onclick="location.href='{% url 'EditRawMaterial' material.id %}';">
-                                <p>{{ material.name }}</p> 
-                            </div>
-                        
-                        {% endfor %}
-                    </div>
-                    
-                    <div id="Packing materials" class="tabcontent">
-                        <h3 style="text-align: center;">Packing materials</h3>
-                        <div style="width: 100%;text-align: right;">
-                            <a href="{% url 'AddPackingMaterial' %}"><img src="{% static 'inspp-icons/add.png' %}" alt="Add packing material" style="width: 30px;margin-bottom:20px;"></a>
-                        </div>
-                        {% for material in PACKINGMATERIAL %}
-                            <div class="list_item"  onclick="location.href='{% url 'EditPackingMaterial' material.id %}';">
-                                <p>{{ material.name }}</p> 
-                            </div>
-                        {% endfor %}
-                    </div>
-                    
-                    <div id="Unpacked products" class="tabcontent">
-                        <h3 style="text-align: center;">Unpacked Products</h3>
-                        <div style="width: 100%;text-align: right;">
-                            <a href="{% url 'AddUnpackedProduct' %}"><img src="{% static 'inspp-icons/add.png' %}" alt="Add packing material" style="width: 30px;margin-bottom:20px;"></a>
-                        </div>
-                            {% for material in UNPACKEDPRODUCT %}
-                                <div class="list_item"  onclick="location.href='{% url 'EditUnpackedProduct' material.id %}';">
-                                    <p>{{ material.name }}</p> 
-                                </div>
-                            {% endfor %}
-                    </div>
     
-                    <div id="Packed products" class="tabcontent">
-                        <h3 style="text-align: center;">Packed Products</h3>
-                        <div style="width: 100%;text-align: right;">
-                            <a href="{% url 'AddPackedProduct' %}"><img src="{% static 'inspp-icons/add.png' %}" alt="Add packing material" style="width: 30px;margin-bottom:20px;"></a>
-                        </div>
-                            {% for material in PACKEDPRODUCT %}
-                                <div class="list_item"  onclick="location.href='{% url 'EditPackedProduct' material.id %}';">
-                                    <p>{{ material.name }}</p> 
-                                </div>
-                            {% endfor %}
-                    </div>
+    {% include 'navbar.html' %}
     
-                    <div id="orders" class="tabcontent">
-                        <h3 style="text-align: center;">Orders</h3>
-                        <div style="width: 100%;text-align: right;">
-                            <a href="{% url 'AddOrder' %}"><img src="{% static 'inspp-icons/add.png' %}" alt="Add packing material" style="width: 30px;margin-bottom:20px;"></a>
-                        </div>
-                            {% for material in ORDER %}
-                                <div class="list_item"  onclick="location.href='{% url 'EditOrder' material.id %}';">
-                                    <p>{{ material.name }}</p> 
-                                </div>
-                            {% endfor %}
-                    </div>
-                </div>
+    
+        <body class="body-style" >
+        <div style="text-align: center;">
+
+            {% if request.user_agent.is_mobile %}
+                <img src="{% static 'images/INSPP-logo.png' %}" style='width:55%;height:auto;padding: 20px;animation: show-up 4s ;'>
+            {% else %}
+                <img src="{% static 'images/INSPP-logo.png' %}" style='width:15%;height:auto;padding: 20px; animation: show-up 4s ;'>
+            {% endif %}
+
+
+            {% if RAWMATERIALS.count %}
+            <h1 class="typing-text">INS Production Plan</h1>
+            <div class="card-style-2" style="width: 30%;display: inline-block;  animation: popup 0.5s ; " >
+                <h1><div id="value">{{ RAWMATERIALS.count }}</div></h1>
+                <p >Raw Materials</p>
+                <div onclick="location.href='{% url 'RawMaterials'  %}';"  class="btn_style_1">OPEN REPOSITORY</div>
             </div>
+            {% endif %}
+
+            {% if PACKINGMATERIAL.count %}
+            <div class="card-style-2" style="width: 30%;display: inline-block; animation: popup 0.8s ;" >
+                <h1><div id="value2">{{ PACKINGMATERIAL.count }}</div></h1>
+                <p>Packing Materials</p>
+                <div onclick="location.href='{% url 'PackingMaterials' %}';"  class="btn_style_1">OPEN REPOSITORY</div>
+            </div>
+            <br>
+            {% endif %}
+
+            {% if UNPACKEDPRODUCT.count %}
+            <div class="card-style-2" style="width: 30%;display: inline-block; animation: popup 1s ;" >
+                <h1><div id="value3">{{ UNPACKEDPRODUCT.count }}</div></h1>
+                <p>Unpacked Products</p>
+                <div onclick="location.href='{% url 'UnpackedProducts' %}';"  class="btn_style_1">OPEN REPOSITORY</div>
+            </div>
+            {% endif %}
+
+            {% if PACKEDPRODUCT.count %}
+            <div class="card-style-2" style="width: 30%;display: inline-block; animation: popup 1.3s ;" >
+                <h1><div id="value4">{{ PACKEDPRODUCT.count }}</div></h1>
+                <p>Packed Products</p>
+                <div onclick="location.href='{% url 'PackedProducts' %}';"  class="btn_style_1">OPEN REPOSITORY</div>
+            </div>
+            {% endif %}
+            <br>
+
+            {% if ORDER.count %}
+            <div class="card-style-2" style="width: 30%;display: inline-block; animation: popup 2s ;" >
+                <h1><div id="value5">{{ ORDER.count }}</div></h1>
+                <p>Orders</p>
+                <div onclick="location.href='{% url 'Orders' %}';"  class="btn_style_1">OPEN REPOSITORY</div>
+            </div>
+            {% endif %}
+
+            
+                
+
+            {% if request.user_agent.is_mobile %}
+            <form style='height:130px;'></form>
+            {% endif %}
         </div>
-
-    {% if request.user_agent.is_mobile %}
-      <form style='height:130px;'></form>
-    {% endif %}
     </body>
-
-    <script>
-        function openTab1(evt, cityName) {
-          var i, tabcontent, tablinks;
-          tabcontent = document.getElementsByClassName("tabcontent");
-          for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-          }
-          tablinks = document.getElementsByClassName("tablinks");
-          for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-          }
-          document.getElementById(cityName).style.display = "block";
-          evt.currentTarget.className += " active";
-        }
-        
-        // Get the element with id="defaultOpen" and click on it
-        document.getElementById("defaultOpen").click();
-        </script>
-</html>
+</html>   
+</body>

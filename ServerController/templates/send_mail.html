@@ -5,37 +5,180 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'style/main.css' %}">
-    <title>INS | Send mail </title>
+    <link rel=icon href="{% static 'images/INSS logo.png' %}" sizes="16x16" type="image/png">
+    <title>INS | Create Mail </title>
   </head>
-  <body style="background-color:#0e1621; font-family: ubuntu; ">
-    {% include 'navbar.html'  %}
+  {% include 'navbar.html' %}
+  <body class="body-style">
+  
     
-    <div class="profile_out_form">
-      <form method='POST' class='profile-form' enctype="multipart/form-data" >
+    <form style="height: 20px;" ></form>
+      <div class="profile_out_form">  
         <h2 style="text-align: center;">INS Mail</h2>
-        {% csrf_token %}
-        {{ message }} <br>
 
+        
+
+
+        <div style="text-align: left;">
         <p style="width:80px; display: inline-block;">From:</p>{{ user.username }} <br>
-        {% if user_to %}
-          <p style="width:80px; display: inline-block;">To:</p>{{ form.username_to.value|default_if_none:user_to  }}<br>
-        {% else %}
-          <p style="width:80px; display: inline-block;">To:</p>{{ form.username_to }}<br>
-        {% endif %}
 
+            <!-- CC -->
+            <p style="width:80px; display: inline-block;">CC:</p>
+            <input type="text" id="cc_input" class="field-style-2" placeholder="username" list="users">
+            <button  id="add_cc" class="btn_style_1" style="font-size: 10px;padding: 9px;"  >Add</button><br>
+            
+
+            {% if user_to %}
+            <div id="cc-users">
+              <div class="btn_style_1" style="width: min-content;display:inline-block;margin: 5px;"> {{ user_to }} </div>
+            </div>
+            {% else %}
+            <div id="cc-users"></div>
+            {% endif %}
+            
+            <hr style="color: #324675;">
+
+            <!-- BCC -->
+            <p style="width:80px; display: inline-block;">BCC:</p>
+            
+            <input  id="bcc_input" class="field-style-2" placeholder="username" list="users">
+
+            <datalist id="users" >
+              <d id="users-area">
+
+            </datalist>
+
+            
+            
+
+            <button  id="add_bcc" style="font-size: 10px;padding: 9px;" class="btn_style_1" >Add</button><br>
+            
+
+            <div id="bcc-users"></div>
+            <hr style="color: #324675;">
+
+        </div>
+
+        <form method='POST' class='profile-form' enctype="multipart/form-data" >
+          {% csrf_token %}
+          <input type="hidden" id="cc-list" name="cc-list" value=''>
+          <input type="hidden" id="bcc-list" name="bcc-list" value=''>
         {% if subject %}
           <p style="width:80px; display: inline-block;">Subject:</p>{{ form.subject.value|default_if_none:subject }}<br>
         {% else %}
+
+
           <p style="width:80px; display: inline-block;">Subject:</p>{{ form.subject }}<br>
         {% endif %}
-            <br><br>
+            <br>
+            
+            <br>
         
         {{ form.body }} 
-        <button type='submit' style="margin-top: 10px;" class="btn_style_1">Send</button>
+        <button type='submit' style="margin-top: 10px;" class="btn_style_1"> <img src="{% static 'images/send.png' %}" style="width: 30px;"> </button>
       </form>
     </div>
     {% if request.user_agent.is_mobile %}
       <form style='height:130px;'></form>
     {% endif %}
   </body>
+  <script>
+    var users = {{ users|safe }};
+    users = users.sort();
+    for (var u in users ){
+      document.getElementById('users-area').insertAdjacentHTML (`beforeend`,`<option value="${users[u]}">`)
+
+    }
+    // ADD CC
+    var cc_list =[]
+    var bcc_list =[]
+    document.getElementById("cc-list").value =  JSON.stringify([]);
+    document.getElementById("bcc-list").value =  JSON.stringify([]);
+
+
+    var add_cc = function(){
+      var username = document.getElementById("cc_input").value;
+      if( username != '' &&  ! cc_list.includes(username) && users.includes(username)  ){
+        cc_list.push(username);
+        document.getElementById("cc-list").value =  JSON.stringify(cc_list);
+        document.getElementById("cc_input").value = '';
+        document.getElementById('cc-users').insertAdjacentHTML ('beforeend',` <div class="btn_style_5" id="CC ${username}" onclick="remove_cc('${username}')" > ${username} </div> `)
+        document.getElementById('notifications_area').insertAdjacentHTML (`afterend`,`<div class='success-notification'> ${username} added to CC </div>`)
+
+
+      }
+      else if (cc_list.includes(username)){          
+          document.getElementById('notifications_area').insertAdjacentHTML (`afterend`,`<div class='error-notification'> ${username} already added </div>`)
+      }
+      else if ( ! users.includes(username) ){          
+          document.getElementById('notifications_area').insertAdjacentHTML (`afterend`,`<div class='error-notification'> "${username}" User Not Found </div>`)
+      }
+    };
+
+    var btn = document.getElementById("add_cc").onclick = add_cc;
+
+    var input = document.getElementById("cc_input");
+    input.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        add_cc()
+      }
+    });
+    
+
+    // remove CC
+
+    var remove_cc = function(value){
+      document.getElementById("CC "+value).remove();
+      item_index = cc_list.indexOf(value)
+      cc_list.splice(item_index, 1);
+      document.getElementById("cc-list").value =  JSON.stringify(cc_list);
+      }
+    
+
+
+
+    // BCC
+    var add_bcc = function(){
+    var username = document.getElementById("bcc_input").value;
+    if( username != ''){
+      bcc_list.push(username);
+      console.log(bcc_list)
+      document.getElementById("bcc-list").value = JSON.stringify(bcc_list);
+      document.getElementById("bcc_input").value = '';
+      document.getElementById('bcc-users').insertAdjacentHTML ('beforeend',` <div class="btn_style_5" id="BCC ${username}" onclick="remove_bcc('${username}')"> ${username} </div> `)
+      document.getElementById('notifications_area').insertAdjacentHTML (`afterend`,`<div class='success-notification'> ${username} added to BCC </div>`)
+
+      }
+      else if (bcc_list.includes(username)){          
+          document.getElementById('notifications_area').insertAdjacentHTML (`afterend`,`<div class='error-notification'> ${username} already added </div>`)
+      }
+      else if ( ! users.includes(username) ){          
+          document.getElementById('notifications_area').insertAdjacentHTML (`afterend`,`<div class='error-notification'> "${username}" User Not Found </div>`)
+      }
+
+    
+    };
+
+
+
+    var btn = document.getElementById("add_bcc").onclick = add_bcc;
+
+    var input = document.getElementById("bcc_input");
+    input.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        add_bcc()
+      }
+    });
+
+    // remove BCC
+
+    var remove_bcc = function(value){
+      document.getElementById("BCC "+value).remove();
+      item_index = bcc_list.indexOf(value)
+      bcc_list.splice(item_index, 1);
+      document.getElementById("bcc-list").value = JSON.stringify(bcc_list);
+      }
+
+  </script>
 </html>
+

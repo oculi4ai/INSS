@@ -1,22 +1,47 @@
 {% load static %}
+{% load mathfilters %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'style/main.css' %}">
-    <title>INS | Send mail </title>
+    <title>INS | '{{ mail.subject }}' Mail </title>
   </head>
-  <body style="background-color:#0e1621; font-family: ubuntu; ">
-    {% include 'navbar.html'  %}
-    
-    <div class="profile_out_form">
-      <form method='POST' class='profile-form' enctype="multipart/form-data" >
+    {% include 'navbar.html' %}
+    <body class="body-style">
+      <form method='POST' class='profile_out_form' style="text-align: left;" enctype="multipart/form-data" >
         <h2 style="text-align: center;">INS Mail</h2>
+        
+        <p style="width:80px; display: inline-block;">CC:</p>
+        {% for m in mail.mail_cc_receiver_set.all %}
+          <div class="btn_style_5" style="font-size: 13px;width:max-content ;animation: show-up {{ forloop.counter|div:2 }}s ;" {% if m.DT %}  title="Readed 
+{{ m.DT }}"  {% endif %}>
+            {{ m.user.username }}
+              {% if m.readed %}
+                <img src="{% static 'images/readed.png' %}" alt="" width="10px" style="display: inline-block;">
+              {% endif %}
+          </div>
+        {% endfor %}
+        <br>
+
+        {% if  mail.username_from == user %}
+        <p style="width:80px; display: inline-block;">BCC:</p>
+        {% for m in mail.mail_bcc_receiver_set.all %}
+          
+          <div class="btn_style_5" style="font-size: 13px;width:max-content ;animation: show-up {{ forloop.counter|div:2 }}s ;" {% if m.DT %}  title="Readed 
+{{ m.DT }}"  {% endif %}>
+            {{ m.user.username }}
+              {% if m.readed %}
+                <img src="{% static 'images/readed.png' %}" alt="" width="10px" style="display: inline-block;">
+              {% endif %}
+          </div>
+        {% endfor %}
+        <br>
+        {% endif %}
 
 
-        <p style="width:80px; display: inline-block;">From:</p>{{ mail.username_from }} <br>
-        <p style="width:80px; display: inline-block;">To:</p>{{ mail.username_to }}<br>
+        <p style="width:80px; display: inline-block;">From:</p> <div class="btn_style_5" style="font-size: 13px;width:max-content ;animation: show-up 0.5s ;"> {{ mail.username_from }} </div><br>
         <p style="width:80px; display: inline-block;">Subject:</p>{{ mail.subject }}
         <p style="text-align:unset;">{{ mail.body|linebreaks }} </p>
         <a style="margin-top: 10px;" class="btn_style_1" href="{% url 'replymail' user_to=mail.username_from.username     subject=mail.subject %}">reply</a>

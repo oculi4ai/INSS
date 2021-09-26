@@ -1,6 +1,8 @@
 from INSPP.models import *
 from users.models import *
 
+a = open('settings.ini','r')
+print(a.read())
 
 
 

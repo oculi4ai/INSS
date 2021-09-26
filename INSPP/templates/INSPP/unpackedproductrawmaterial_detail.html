@@ -6,13 +6,14 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=icon href="{% static 'images/INSPP logo.png' %}" sizes="16x16" type="image/png">
     <link rel="stylesheet" href="{% static 'style/main.css' %}">
-    <title>INS | Unpacked product Raw material</title>
+    <title>INS | Unpacked Product Raw Material</title>
   </head>
-  <body style="background-color:#0e1621; font-family: ubuntu; ">
-    {% include 'navbar.html'  %}
+  {% include 'navbar.html' %}
+          <body class="body-style">
     <form class="profile_out_form" method="POST" style="text-align: left;">
-        <h2 style="text-align: center;">Unpacked Product Raw material</h2>
+        <h2 style="text-align: center;">Unpacked Product Raw Material</h2>
         {% csrf_token %}
         <p style="width: 30%; display: inline-block;text-align: right;"> product:   </p>{{ form.product|add_class:"field-style-2" }} <br>
         <p style="width: 30%; display: inline-block;text-align: right;"> material:  </p>{{ form.material|add_class:"field-style-2" }} <br>

@@ -1,0 +1,19 @@
+<div style="height: 20px;"></div>
+<div style="width: 100%;text-align: center;">
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <li class="btn_style_3" onclick="location.href='?page=1';"><a style="text-decoration: none;color: cornsilk;">First</a></li>
+            <li class="btn_style_3" onclick="location.href='?page={{ page_obj.previous_page_number }}';"><a style="text-decoration: none;color: cornsilk;" >Previous</a></li>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <li  class="btn_style_3" onclick="location.href='?page={{ num }}';" style="box-shadow: 1px 1px 1px 1px rgb(4, 196, 255);"> <a style="text-decoration: none;color: cornsilk;" >{{ num }}</a></li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="btn_style_3" onclick="location.href='?page={{ num }}';"> <a style="text-decoration: none;color: cornsilk;">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <li class="btn_style_3" onclick="location.href='?page={{ page_obj.next_page_number }}';"> <a style="text-decoration: none;color: cornsilk;">Next</a></li>
+        {% endif %}
+    {% endif %}
+</div>

@@ -11,7 +11,11 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-import os
+import os, configparser
+
+config = configparser.ConfigParser()
+config.read('settings.ini')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,13 +40,17 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
+    'django.contrib.messages',    
     'django.contrib.staticfiles',
     'ServerController.apps.ServercontrollerConfig',
     'INSPP',
+    'INSM',
     'users',
+    'mathfilters',
     'widget_tweaks',
     'django_user_agents',
+    'rest_framework',
+    
 ]
 
 MIDDLEWARE = [
@@ -76,6 +84,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'INSServer.wsgi.application'
 
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -107,12 +123,13 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
+
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TZ_GMT_INT = config['INFO']['TZ_GMT']
+
+TIME_ZONE = f'Etc/GMT+{ TZ_GMT_INT }'
 
 USE_I18N = True
 

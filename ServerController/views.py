@@ -10,10 +10,11 @@ from django.contrib.auth.models import User
 import time, threading
 from django.http import FileResponse, HttpResponse, JsonResponse
 import mimetypes
-import os
+import os, configparser, sys
 from django.conf import settings
 from django.http import HttpResponse, Http404
-
+from django.views.generic import DetailView  ,ListView
+from django.core.management import execute_from_command_line
 
 # Create your views here.
 def home(request):
@@ -30,11 +31,113 @@ def profile(request):
     	return render(request , 'profile.html' )
 
 
-def mailView(request):
+def Settings(request):
+    if not request.user.is_authenticated:
+    	return redirect('login')
+    elif request.user.profile.user_app.name == 'INSM':
+
+    	config = configparser.ConfigParser()
+    	config.read('settings.ini')
+
+    	if request.method == 'POST':
+    		if 'time_zone' in request.POST:
+    			print(request.POST)
+    			try:
+    				config['INFO']['TZ_GMT'] = str(int(request.POST['value']))
+    				config.write(open('settings.ini','w'))
+    				settings.TIME_ZONE = 'Etc/GMT+'+ config['INFO']['TZ_GMT']
+
+					# this to codes to rewrite file to make the server reload
+    				old_file = open( os.path.join('ServerController','admin.py'),'r').read()
+    				open( os.path.join('ServerController','admin.py'),'w').write(old_file)
+
+    			except:
+    				pass
+
+    			data = {
+				'TIME_ZONE_GMT' :  config['INFO']['TZ_GMT'],
+				}
+    			return render(request , 'settings.html', data )
+				
+    	else:
+    		data = {
+				'TIME_ZONE_GMT' :  config['INFO']['TZ_GMT'],
+			}
+    		return render(request , 'settings.html', data )
+
+    else:
+    	return redirect('accessDenied')
+
+
+	
+
+def mail_home(request):
+    
     if not request.user.is_authenticated:
     	return redirect('login')
     else:
-    	return render(request , 'mail.html' )
+    	new_mails_ids = set.union( set(Mail_CC_Receiver.objects.filter(user = request.user,readed=False ).values_list('user', flat=True)) , set(Mail_BCC_Receiver.objects.filter(user = request.user,readed=False ).values_list('user', flat=True)))
+    	print(new_mails_ids)
+    	new_mails = mail.objects.filter(pk__in = new_mails_ids)
+    	if len(new_mails)>3 :
+    		new_mails_objects = new_mails[:3]
+    	else:
+    		new_mails_objects = new_mails
+
+
+    	
+    	mails = mail.objects.filter(username_from = request.user)
+    	contacts_ids = set.union(
+			set(Mail_CC_Receiver.objects.filter( mail__in = mails).values_list('user', flat=True)),
+			set(Mail_BCC_Receiver.objects.filter( mail__in = mails).values_list('user', flat=True))
+		)
+    	contacts = User.objects.filter(pk__in = contacts_ids)
+
+		
+    	
+
+    	return render(request , 'mail-home.html', { 'new_messages_count': 3 ,'new_messages': new_mails_objects, 'contacts':contacts } )
+
+
+
+class CCInboxMailView(ListView):
+	model 				= Mail_CC_Receiver
+	context_object_name = 'mail'
+	template_name 		= 'cc-inbox-mail.html'
+	paginate_by			= 12
+	ordering 			= ['-created_date']
+
+	def get_queryset(self):
+		queryset = super().get_queryset()
+		return  queryset.filter(user = self.request.user)
+
+
+
+class BCCInboxMailView(ListView):
+	model 				= Mail_BCC_Receiver
+	context_object_name = 'mail'
+	template_name 		= 'bcc-inbox-mail.html'
+	paginate_by			= 12
+	ordering 			= ['-created_date']
+
+	def get_queryset(self):
+		queryset = super().get_queryset()
+		return  queryset.filter(user = self.request.user)
+
+
+
+class OutboxMailView(ListView):
+	model 		= mail
+	context_object_name = 'mail'
+	template_name = 'outbox-mail.html'
+	paginate_by=12
+	ordering = ['-sending_datetime']
+
+	def get_queryset(self):
+		queryset = super().get_queryset()
+		return queryset.filter(username_from=self.request.user)
+
+
 
 def accessDenied(request):
     if not request.user.is_authenticated:
@@ -127,11 +230,6 @@ def view_login(request):
 			except:
 					return redirect(user.profile.user_app.name+'Home')
 
-				
-			
-			
-			
-
 		else:
 			
 			red = render(request, 'login.html' , {'form': form})
@@ -187,6 +285,7 @@ def personal_storage_API(request, folder):
 			API_folders.append(
 				{
 					'name'     	:folder.name,
+					'pk'     	:folder.pk,
 					'privet'    :folder.privet,
 					'MainFolder':folder.MainFolder.pk,
 				}
@@ -196,14 +295,52 @@ def personal_storage_API(request, folder):
 			API_files.append(
 				{
 					'name' : file.name,
+					'pk' : file.pk,
 					'file' : file.file.url,
 					'privet' : file.privet,
 					'MainFolder' : file.MainFolder.pk,
 				}
 			)
 
-		print(API_folders)
-		return JsonResponse({'folders' : API_folders , 'files':API_files }, safe=False)
+		out_data = {
+				'name': current_item.name ,
+				'folders' : API_folders , 
+				'files':API_files }
+			
+		
+		if current_item.MainFolder:
+			
+
+			if current_item.MainFolder.MainFolder:
+				
+
+				if current_item.MainFolder.MainFolder.MainFolder:
+					out_data['p1_folder'] = current_item.MainFolder.MainFolder.MainFolder.pk
+					out_data['p1_folder_name'] = current_item.MainFolder.MainFolder.MainFolder.name
+
+					out_data['p2_folder'] = current_item.MainFolder.MainFolder.pk
+					out_data['p2_folder_name'] = current_item.MainFolder.MainFolder.name
+
+					out_data['p3_folder'] = current_item.MainFolder.pk
+					out_data['p3_folder_name'] = current_item.MainFolder.name
+
+				else:
+					out_data['p1_folder'] = current_item.MainFolder.MainFolder.pk
+					out_data['p1_folder_name'] = current_item.MainFolder.MainFolder.name
+
+					out_data['p2_folder'] = current_item.MainFolder.pk
+					out_data['p2_folder_name'] = current_item.MainFolder.name
+
+
+			else:
+				out_data['p1_folder'] = current_item.MainFolder.pk
+				out_data['p1_folder_name'] = current_item.MainFolder.name
+
+
+		print(out_data)
+
+
+		return JsonResponse(out_data, safe=False)
 	
 	else:
 		return redirect('accessDenied')
@@ -240,14 +377,15 @@ def main_personal_storage_API(request):
 			API_files.append(
 				{
 					'name' : file.name,
+					'pk' : file.pk,
 					'file' : file.file.url,
 					'privet' : file.privet,
 					'MainFolder' : file.MainFolder.pk,
 				}
 			)
 
-		print(API_folders)
-		return JsonResponse({'folders' : API_folders , 'files':API_files }, safe=False)
+
+		return JsonResponse({'name': current_item.name ,'folders' : API_folders , 'files':API_files }, safe=False)
 	
 	else:
 		return redirect('accessDenied')

@@ -33,5 +33,5 @@ if __name__ == '__main__':
 
 
     #threading.Thread(target=check_if_server_is_ready).start()    
-
+    
     execute_from_command_line(('','runserver',local_ip+':8000'))

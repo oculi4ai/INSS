@@ -1,0 +1,12 @@
+<div  style="position:absolute;right: 5px;">
+    <h1 id="notifications_area"></h1>
+    {% for message in user.error_messages %}
+        <div class='error-notification'>{{ message }}</div>
+    {% endfor %}
+    {% for message in user.success_messages %}
+        <div class='success-notification'>
+            <h5>{{ message.0 }}</h5>
+            <small>{{ message.1|linebreaks }}</small>
+        </div>
+    {% endfor %}
+</div>

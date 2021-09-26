@@ -1,0 +1,57 @@
+{% load static %}
+{% load mathfilters %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'style/main.css' %}">
+        <link rel=icon href="{% static 'images/INSS logo.png' %}" sizes="16x16" type="image/png">
+        <title>INS | Production Plan </title>
+    </head>
+    
+    {% include 'navbar.html' %}
+    
+    
+        <body class="body-style" >
+        <div style="text-align: center;">
+
+            {% if request.user_agent.is_mobile %}
+                <img src="{% static 'images/mail.png' %}" style='width:55%;height:auto;padding: 20px;animation: show-up 4s ;'>
+            {% else %}
+                <img src="{% static 'images/mail.png' %}" style='width:15%;height:auto;padding: 20px; animation: show-up 4s ;'>
+            {% endif %}
+
+            <h1 class="typing-text">INS Mail</h1>
+
+            <div style="height: 20px;" ></div>
+            
+            {% if new_messages_count %}
+            <div style="display: inline-block;width: 25%;min-width: 300px;">
+                <div class="card-style-2" style="min-width: 90px; width: 80%;  animation: popup 0.3s; margin: 0 auto;word-wrap:break-word; " onclick="location.href='{% url 'BCCInboxMailView' %}';" >
+                    <h1 style="display: inline-block;"><div id="value">{{ new_messages_count }}</div></h1>
+                    <p  style="display: inline-block;">New messages</p>
+                </div>
+                
+                {% for message in new_messages %}
+                <div style="height: 20px;" ></div>
+                <div class="card-style-2" style=" padding: 5px; min-width: 90px; width: 80%; word-wrap:break-word; animation: popup {{ forloop.counter|div:2 }}s; margin: 0 auto; padding-left:20px; text-align:left;" onclick="location.href='{ url 'readmail' message.pk }';">
+                    <h2>{{ message.username_from }}</h2>
+                    <h4>{{ message.subject }}</h4>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div style="display: inline-block;width: 60%;vertical-align: top;text-align: left;">
+                <h1>Contacts</h1>
+                {% for contact in contacts %}
+                    <div class="btn_style_5" style="display: inline-block;  animation: popup {{  forloop.counter|div:10  }}s;  text-align:left;" >
+                        <h3>{{ contact.username }}</h3>
+                        
+                    </div>
+                    
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+</html>   
+</body>

@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <link rel=icon href="{% static 'images/INSS logo.png' %}" sizes="16x16" type="image/png">
+    <title>INS | Settings </title>
+  </head>
+  {% include 'navbar.html' %}
+    <body class="body-style">
+        <h1 class="typing-text-2">SETTINGS</h1>
+        <form method="POST" class="card-style-2" style="display: inline-block;width: max-content;  animation: popup 1s; ">
+            {% csrf_token %}
+            <h1>TIME ZONE</h1>
+            <p style="display: inline-block;width: 60px;">GMT + </p><input type="number" name='value' value="{{ TIME_ZONE_GMT }}" class="field-style-2"><br>
+            <button type="submit" name='time_zone' class="btn_style_2" style="position: absolute;right: 5px; bottom: 5px; ">APPLY</button>
+        </form>
+    </body>
+ 
+</html>
+

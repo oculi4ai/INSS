@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <link rel=icon href="{% static 'images/INSS logo.png' %}" sizes="16x16" type="image/png">
+    <title>INS | CC Inbox </title>
+</head>
+{% include 'navbar.html' %}
+<body class="body-style">
+    
+    <div style="display: inline-block;width: 100%;">
+        <div>
+            <div style=" display: inline-block;width: 100%;">
+
+                <div style="display: inline-block; width: 100%;color: white;right: 0; ">
+                    <h2 style="text-align: center;">CC INBOX</h2>
+
+                    {% for m in mail %}
+                    
+                    <div class="list_item mail_item" onclick="location.href='{% url 'readmail' m.mail.pk %}';">
+                        {% if not m.readed %}
+                            <h4 style="color: aqua;">{{m.mail.username_from}}</h4>
+                        {% else %}
+                            <h4>{{m.mail.username_from}}</h4>
+                        {% endif %}
+                        <small style="color: gray;">{{ m.mail.sending_datetime }}</small>
+                        <p style="margin-top: 35px;">{{ m.mail.subject }}</p>
+                    </div>
+                    
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        {% include 'pages-tabs.html' %}
+    </div>
+    {% if request.user_agent.is_mobile %}
+        <form style='height:130px;'></form>
+    {% endif %}
+</body>
+<script>
+    function openTab1(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+</script>
+
+</html>

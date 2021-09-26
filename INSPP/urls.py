@@ -35,4 +35,16 @@ urlpatterns = [#add_distribution
     path('PackedProductPackingMaterial/<int:pk>/'   , PackedProductPackingMaterialView.as_view(), name='EditPackedProductPackingMaterial'),
     path('Order/<int:pk>/'                          , OrderView.as_view()                       , name='EditOrder'                       ),
 
+    path('RawMaterials/'                            , RawMaterialsView.as_view()                , name='RawMaterials'                    ),
+    path('UnpackedProducts/'                        , UnpackedProductsView.as_view()            , name='UnpackedProducts'                ),
+    path('PackedProducts/'                          , PackedProductsView.as_view()              , name='PackedProducts'                  ),
+    path('PackingMaterials/'                        , PackingMaterialsView.as_view()            , name='PackingMaterials'                ),
+    path('Orders/'                                  , OrdersView.as_view()                      , name='Orders'                          ),
+
+
+    
+
+
+
+
 ]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

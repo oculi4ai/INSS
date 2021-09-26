@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="{% static 'style/main.css' %}">
     <title>INS | Send mail </title>
   </head>
-  <body style="background-color:#0e1621; font-family: ubuntu; ">
-    {% include 'navbar.html' with current_page="profile"  %}
+  {% include 'navbar.html' %}
+  <body class="body-style">
     <div class="profile_out_form">
         <h2>Profile</h2>
         <p>username: {{ user.username }}</p>

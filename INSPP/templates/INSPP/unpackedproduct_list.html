@@ -1,0 +1,35 @@
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel=icon href="{% static 'images/INSPP logo.png' %}" sizes="16x16" type="image/png">
+        <link rel="stylesheet" href="{% static 'style/main.css' %}">
+        <title>INS | Unpacked Products </title>
+    </head>
+    {% include 'navbar.html' %}
+          <body class="body-style">
+        <div>
+            <div style=" display: inline-block;width: 100%;">
+                <div style="display: inline-block; width: 95%;color: white;right: 0; ">
+                    <div id="Raw materials" class="tabcontent" >
+                        <h1 class="typing-text-2">Unpacked Products</h1>
+                        <div style="width: 100%;text-align: right;">
+                            <a href="{% url 'AddUnpackedProduct' %}"><img src="{% static 'inspp-icons/add.png' %}" alt="Add Unpacked Product" style="width: 30px;margin-bottom:20px;"></a>
+                        </div>
+                        {% for material in UnpackedProducts %}
+                            <div class="list_item"  onclick="location.href='{% url 'EditUnpackedProduct' material.id %}';">
+                                <p>{{ material.name }}</p> 
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include 'pages-tabs.html' %}
+
+    {% if request.user_agent.is_mobile %}
+      <form style='height:130px;'></form>
+    {% endif %}
+    </body>
+</html>

@@ -89,6 +89,39 @@ def INSPP_view_update(request):
 
 
 
+class RawMaterialsView(ListView):
+	model 		        = RawMaterial
+	context_object_name = 'RawMaterials'
+	template_name       = 'RawMaterials.html'
+	paginate_by         = 12
+
+class UnpackedProductsView(ListView):
+	model 		        = UnpackedProduct
+	context_object_name = 'UnpackedProducts'
+	template_name       = 'UnpackedProducts.html'
+	paginate_by         = 12
+
+class PackedProductsView(ListView):
+	model 		        = PackedProduct
+	context_object_name = 'PackedProducts'
+	template_name       = 'PackedProducts.html'
+	paginate_by         = 12
+
+class PackingMaterialsView(ListView):
+	model 		        = PackingMaterial
+	context_object_name = 'PackingMaterials'
+	template_name       = 'PackingMaterials.html'
+	paginate_by         = 12
+
+class OrdersView(ListView):
+	model 		        = Order
+	context_object_name = 'Orders'
+	template_name       = 'Orders.html'
+	paginate_by         = 12
+
+
+
+
 ####################################################
 ###############     Add         ####################
 ####################################################
