@@ -32,6 +32,7 @@ def profile(request):
 
 
 def Settings(request):
+    print(dir(request))
     if not request.user.is_authenticated:
     	return redirect('login')
     elif request.user.profile.user_app.name == 'INSM':
@@ -41,27 +42,44 @@ def Settings(request):
 
     	if request.method == 'POST':
     		if 'time_zone' in request.POST:
-    			print(request.POST)
     			try:
     				config['INFO']['TZ_GMT'] = str(int(request.POST['value']))
     				config.write(open('settings.ini','w'))
     				settings.TIME_ZONE = 'Etc/GMT+'+ config['INFO']['TZ_GMT']
 
-					# this to codes to rewrite file to make the server reload
-    				old_file = open( os.path.join('ServerController','admin.py'),'r').read()
-    				open( os.path.join('ServerController','admin.py'),'w').write(old_file)
-
     			except:
     				pass
 
-    			data = {
-				'TIME_ZONE_GMT' :  config['INFO']['TZ_GMT'],
-				}
-    			return render(request , 'settings.html', data )
+    			
+
+    		if 'HOST_TYPE' in request.POST:
+    			print(request.POST)
 				
+    			config['INFO']['HOST_TYPE'] = request.POST['type']
+    			config.write(open('settings.ini','w'))
+    			old_file = open( os.path.join('ServerController','admin.py'),'r').read()
+    			open( os.path.join('ServerController','admin.py'),'w').write(old_file)
+
+    			return render(render, 'server-reloading.html')
+
+
+    		old_file = open( os.path.join('ServerController','admin.py'),'r').read()
+    		open( os.path.join('ServerController','admin.py'),'w').write(old_file)
+
+
+    		data = { 
+				'TIME_ZONE_GMT' :  config['INFO']['TZ_GMT'],
+				'HOST_TYPE' 	:  config['INFO']['HOST_TYPE'],
+				'HOST_TYPES'	: ['Device', 'LAN', 'WAN'],
+			}
+    		return render(request , 'settings.html', data )
+
+
     	else:
     		data = {
 				'TIME_ZONE_GMT' :  config['INFO']['TZ_GMT'],
+				'HOST_TYPE' 	:  config['INFO']['HOST_TYPE'],
+				'HOST_TYPES'	: ['Device', 'LAN', 'WAN'],
 			}
     		return render(request , 'settings.html', data )
 

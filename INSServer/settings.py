@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '9t^okhni1jzdijty6jutkb3#o_uzwh@qoxj7^je0lamrv-8$6i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -165,4 +165,6 @@ UPDATED_DATA={
         'ORDER':                       (),
     }
 }
+
+
 

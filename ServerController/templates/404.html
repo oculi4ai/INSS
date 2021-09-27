@@ -1,0 +1,27 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ <link rel="stylesheet" href="{% static 'style/main.css' %}">
+  <title>INS | 404</title>
+  <link rel="stylesheet" media="all" href="style.css" />
+</head>
+<body class="body-style">
+    {% include 'navbar.html' %}
+    <div id="clouds">
+            <div class="cloud x1"></div>
+            <div class="cloud x1_5"></div>
+            <div class="cloud x2"></div>
+            <div class="cloud x3"></div>
+            <div class="cloud x4"></div>
+            <div class="cloud x5"></div>
+        </div>
+        <div style="text-align: center;display: block;position: relative;width:30%;margin:100px auto;background-color: #232f4296;padding: 20px;">
+            <h1 style="font-size: 1000%;">404</h1>
+            <hr style="padding: 0;border: none;border-top: 5px solid #fff;color: #fff;text-align: center;margin: 0px auto;width: 420px;height:10px;z-index: -10;">
+            <h1>PAGE NOT FOUND</h1>
+        </div>
+</body>
+</html>

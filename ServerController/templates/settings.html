@@ -11,12 +11,30 @@
   {% include 'navbar.html' %}
     <body class="body-style">
         <h1 class="typing-text-2">SETTINGS</h1>
-        <form method="POST" class="card-style-2" style="display: inline-block;width: max-content;  animation: popup 1s; ">
+
+        <form method="POST" class="card-style-2" style="display: inline-block;width: max-content;  animation: popup 1s;vertical-align: top; ">
             {% csrf_token %}
             <h1>TIME ZONE</h1>
             <p style="display: inline-block;width: 60px;">GMT + </p><input type="number" name='value' value="{{ TIME_ZONE_GMT }}" class="field-style-2"><br>
             <button type="submit" name='time_zone' class="btn_style_2" style="position: absolute;right: 5px; bottom: 5px; ">APPLY</button>
         </form>
+
+        <form method="POST" class="card-style-2" style="display: inline-block;width: max-content;  animation: popup 1s;vertical-align: top; ">
+          {% csrf_token %}
+          <h1>HOST</h1>
+          <p style="display: inline-block;width: 60px;">TYPE: </p>
+          <select class="field-style-2" name="type" id="pet-select">
+            <option  value="{{ HOST_TYPE }}">{{ HOST_TYPE }}</option>
+            {% for t in HOST_TYPES %}
+              {% if t != HOST_TYPE %}
+                <option value="{{ t }}">{{ t }}</option>
+              {% endif %}
+            {% endfor %}
+          </select><br>
+          <p onclick="" style="display: inline-block;">URL: http://{{ request.get_host }}/</p>
+          <div onclick='navigator.clipboard.writeText("http://{{ request.get_host }}/")' class="btn_style_1" style="display:inline-block;margin-bottom: 40px;">Copy</div><br>
+          <button type="submit" name='HOST_TYPE' class="btn_style_2" style="position: absolute;right: 5px; bottom: 5px; ">APPLY</button>
+      </form>
     </body>
  
 </html>
